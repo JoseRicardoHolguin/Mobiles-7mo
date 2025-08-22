@@ -1,4 +1,4 @@
-package com.jorgeromo.androidClassMp1.core
+package com.jorgeromo.androidClassMp1.utils
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

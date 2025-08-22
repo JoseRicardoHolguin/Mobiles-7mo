@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jorgeromo.androidClassMp1.core.DataStoreManager
+import com.jorgeromo.androidClassMp1.utils.DataStoreManager
 import com.jorgeromo.androidClassMp1.firstpartial.onboarding.viewmodel.OnboardingViewModel
 import com.jorgeromo.androidClassMp1.firstpartial.onboarding.views.OnboardingView
 import com.jorgeromo.androidClassMp1.navigation.TabBarNavigationView
