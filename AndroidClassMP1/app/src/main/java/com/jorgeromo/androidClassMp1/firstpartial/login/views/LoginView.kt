@@ -1,4 +1,4 @@
-package com.jorgeromo.androidClassMp1.ids.login.views
+package com.jorgeromo.androidClassMp1.firstpartial.login.views
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

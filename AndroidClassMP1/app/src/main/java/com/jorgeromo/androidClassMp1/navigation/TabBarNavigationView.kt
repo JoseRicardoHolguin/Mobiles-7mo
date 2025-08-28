@@ -14,7 +14,7 @@ import com.jorgeromo.androidClassMp1.firstpartial.FirstPartialView
 import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
 import com.jorgeromo.androidClassMp1.ids.IdsView
 import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
-import com.jorgeromo.androidClassMp1.ids.login.views.LoginView
+import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
 import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TabBarNavigationView(navController: NavHostController = rememberNavController()) {
     val items = listOf(
-        ScreenNavigation.Ids,
         ScreenNavigation.FirstPartial,
         ScreenNavigation.SecondPartial,
         ScreenNavigation.ThirdPartial
@@ -35,7 +34,6 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
     // Mapa de títulos por ruta (incluye tabs y pantallas internas)
     val routeTitles = remember {
         mapOf(
-            ScreenNavigation.Ids.route to ScreenNavigation.Ids.label,
             ScreenNavigation.FirstPartial.route to ScreenNavigation.FirstPartial.label,
             ScreenNavigation.SecondPartial.route to ScreenNavigation.SecondPartial.label,
             ScreenNavigation.ThirdPartial.route to ScreenNavigation.ThirdPartial.label,
@@ -91,10 +89,9 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = ScreenNavigation.Ids.route,
+            startDestination = ScreenNavigation.FirstPartial.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(ScreenNavigation.Ids.route) { IdsView(navController) }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView() }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }
