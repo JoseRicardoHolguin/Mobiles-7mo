@@ -20,12 +20,14 @@ import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
+import com.jorgeromo.androidClassMp1.firstpartial.HomeView
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TabBarNavigationView(navController: NavHostController = rememberNavController()) {
     val items = listOf(
+        ScreenNavigation.Home,
         ScreenNavigation.FirstPartial,
         ScreenNavigation.SecondPartial,
         ScreenNavigation.ThirdPartial
@@ -44,7 +46,8 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             ScreenNavigation.Sum.route to "Suma",
             ScreenNavigation.Temperature.route to "Temperatura",
             ScreenNavigation.StudentList.route to "Estudiantes",
-            ScreenNavigation.Locations.route to "Ubicaciones"
+            ScreenNavigation.Locations.route to "Ubicaciones",
+            ScreenNavigation.Home.route to "Home"
         )
     }
 
@@ -89,9 +92,10 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = ScreenNavigation.FirstPartial.route,
+            startDestination = ScreenNavigation.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(ScreenNavigation.Home.route) { HomeView()}
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView() }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }

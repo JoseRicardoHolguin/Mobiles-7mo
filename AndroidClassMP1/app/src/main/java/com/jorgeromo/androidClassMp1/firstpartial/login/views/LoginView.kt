@@ -96,8 +96,30 @@ fun LoginView() {
         ) {
             Text(stringResource(R.string.login_button))
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Botón de huella dactilar
+        Button(
+            onClick = { /* Lógica de autenticación con huella */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.huella_dactilar), // Asegúrate de tener este recurso
+                    contentDescription = "Huella",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Huella")
+            }
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
