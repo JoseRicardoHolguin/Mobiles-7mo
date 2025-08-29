@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -26,12 +25,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import com.jorgeromo.androidClassMp1.R
-import com.jorgeromo.androidClassMp1.ui.theme.AndroidClassMP1Theme
-
 
 @Composable
-fun LoginView() {
+fun LoginView(navController: NavController) {
     // Variables de estado
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -109,7 +107,7 @@ fun LoginView() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.huella_dactilar), // Asegúrate de tener este recurso
+                    painter = painterResource(id = R.drawable.huella_dactilar),
                     contentDescription = "Huella",
                     modifier = Modifier.size(24.dp)
                 )
@@ -117,14 +115,17 @@ fun LoginView() {
                 Text("Huella")
             }
         }
-    }
-}
 
+        Spacer(modifier = Modifier.height(24.dp))
 
-@Preview(showBackground = true)
-@Composable
-fun LoginViewPreview() {
-    AndroidClassMP1Theme {
-        LoginView()
+        // 🔙 Botón de regresar
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Button(onClick = { navController.popBackStack() }) {
+                Text("Regresar")
+            }
+        }
     }
 }

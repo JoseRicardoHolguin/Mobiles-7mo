@@ -67,25 +67,33 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             )
         },
         bottomBar = {
-            NavigationBar {
-                items.forEach { screen ->
-                    val selected = currentRoute == screen.route
-                    NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = screen.label) },
-                        label = { Text(screen.label) },
-                        selected = selected,
-                        onClick = {
-                            if (!selected) {
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
+            if (currentRoute in listOf(
+                    ScreenNavigation.Home.route,
+                    ScreenNavigation.FirstPartial.route,
+                    ScreenNavigation.SecondPartial.route,
+                    ScreenNavigation.ThirdPartial.route
+                )
+            ) {
+                NavigationBar {
+                    items.forEach { screen ->
+                        val selected = currentRoute == screen.route
+                        NavigationBarItem(
+                            icon = { Icon(screen.icon, contentDescription = screen.label) },
+                            label = { Text(screen.label) },
+                            selected = selected,
+                            onClick = {
+                                if (!selected) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
@@ -95,14 +103,14 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             startDestination = ScreenNavigation.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(ScreenNavigation.Home.route) { HomeView()}
-            composable(ScreenNavigation.FirstPartial.route) { FirstPartialView() }
+            composable(ScreenNavigation.Home.route) { HomeView(navController)}
+            composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }
 
             // Rutas internas
             composable(ScreenNavigation.IMC.route) { IMCView() }
-            composable(ScreenNavigation.Login.route) { LoginView() }
+            composable(ScreenNavigation.Login.route) { LoginView(navController) }
             composable(ScreenNavigation.Sum.route) { SumView() }
             composable(ScreenNavigation.Temperature.route) { TempView() }
             composable(ScreenNavigation.StudentList.route) { StudentView() }
