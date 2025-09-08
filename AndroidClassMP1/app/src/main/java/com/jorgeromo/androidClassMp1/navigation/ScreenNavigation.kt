@@ -15,5 +15,7 @@ sealed class ScreenNavigation(val route: String, val label: String, val icon: Im
     object StudentList : ScreenNavigation("StudentListRoute", "Estudiantes", Icons.Default.People)
     object Locations : ScreenNavigation("LocationsListRoute", "Location", Icons.Default.People)
     object Home : ScreenNavigation("HomeRoute", "Home", Icons.Default.People)
+    object Lottie : ScreenNavigation("LottieHome", "Lottie", Icons.Default.People)
+    object Home2 : ScreenNavigation("Home2Route", "Home2", Icons.Default.People)
 
 }

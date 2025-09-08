@@ -1,5 +1,7 @@
 package com.jorgeromo.androidClassMp1.navigation
 
+import Home2View
+import LoginView
 import SecondPartialView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -12,15 +14,15 @@ import androidx.navigation.compose.*
 import androidx.navigation.compose.rememberNavController
 import com.jorgeromo.androidClassMp1.firstpartial.FirstPartialView
 import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
-import com.jorgeromo.androidClassMp1.ids.IdsView
 import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
-import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
 import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import com.jorgeromo.androidClassMp1.firstpartial.HomeView
+import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,6 +117,9 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             composable(ScreenNavigation.Temperature.route) { TempView() }
             composable(ScreenNavigation.StudentList.route) { StudentView() }
             composable(ScreenNavigation.Locations.route) { LocationListScreen() }
+            composable(ScreenNavigation.Lottie.route) {LottieAnimationView()}
+            composable(ScreenNavigation.Home2.route) {Home2View()}
+
         }
     }
 }

@@ -34,5 +34,11 @@ fun FirstPartialView(navController: NavController) {
         }) {
             Text("Ir a Login")
         }
+        Button(onClick = {
+            navController.navigate(ScreenNavigation.Lottie.route)
+        }) {
+            Text("Ir a Lottie")
+        }
+
     }
 }
