@@ -1,6 +1,5 @@
 package com.jorgeromo.androidClassMp1.navigation
 
-import Home2View
 import LoginView
 import SecondPartialView
 import androidx.compose.foundation.layout.padding
@@ -20,8 +19,9 @@ import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
-import com.jorgeromo.androidClassMp1.secondpartial.home.view.HomeView
 import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
+import com.jorgeromo.androidClassMp1.ids.IdsView
+import com.jorgeromo.androidClassMp1.secondpartial.home.HomeView
 import com.jorgeromo.androidClassMp1.secondpartial.qrcode.QrCodeView
 
 
@@ -29,7 +29,7 @@ import com.jorgeromo.androidClassMp1.secondpartial.qrcode.QrCodeView
 @Composable
 fun TabBarNavigationView(navController: NavHostController = rememberNavController()) {
     val items = listOf(
-        ScreenNavigation.Home,
+        ScreenNavigation.Ids,
         ScreenNavigation.FirstPartial,
         ScreenNavigation.SecondPartial,
         ScreenNavigation.ThirdPartial
@@ -70,7 +70,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
         },
         bottomBar = {
             if (currentRoute in listOf(
-                    ScreenNavigation.Home.route,
+                    ScreenNavigation.Ids.route,
                     ScreenNavigation.FirstPartial.route,
                     ScreenNavigation.SecondPartial.route,
                     ScreenNavigation.ThirdPartial.route
@@ -102,13 +102,15 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = ScreenNavigation.Home.route,
+            startDestination = ScreenNavigation.Ids.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(ScreenNavigation.Home.route) { HomeView(navController) }
+            composable(ScreenNavigation.Home.route) { HomeView() }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView(navController) }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }
+            composable(ScreenNavigation.Ids.route) { IdsView(navController) }
+
 
             // Rutas internas
             composable(ScreenNavigation.IMC.route) { IMCView() }
@@ -118,7 +120,6 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             composable(ScreenNavigation.StudentList.route) { StudentView() }
             composable(ScreenNavigation.Locations.route) { LocationListScreen() }
             composable(ScreenNavigation.Lottie.route) {LottieAnimationView()}
-            composable(ScreenNavigation.Home2.route) {Home2View()}
             composable(ScreenNavigation.QrCode.route) { QrCodeView() }
 
         }

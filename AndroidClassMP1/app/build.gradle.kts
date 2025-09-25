@@ -53,6 +53,8 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
     implementation("com.google.mlkit:vision-common:17.3.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
 
     // BOM de Compose
     implementation(platform(libs.androidx.compose.bom))
