@@ -20,8 +20,7 @@ import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
-import com.jorgeromo.androidClassMp1.firstpartial.HomeView
+import com.jorgeromo.androidClassMp1.secondpartial.home.view.HomeView
 import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 import com.jorgeromo.androidClassMp1.secondpartial.qrcode.QrCodeView
 
@@ -106,7 +105,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             startDestination = ScreenNavigation.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(ScreenNavigation.Home.route) { HomeView(navController)}
+            composable(ScreenNavigation.Home.route) { HomeView(navController) }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView(navController) }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }

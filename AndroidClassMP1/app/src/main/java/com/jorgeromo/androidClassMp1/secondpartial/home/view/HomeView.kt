@@ -1,4 +1,4 @@
-package com.jorgeromo.androidClassMp1.firstpartial
+package com.jorgeromo.androidClassMp1.secondpartial.home.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
