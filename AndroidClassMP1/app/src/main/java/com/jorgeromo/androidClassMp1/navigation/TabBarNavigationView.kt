@@ -5,6 +5,8 @@ import SecondPartialView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,10 +21,17 @@ import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 import com.jorgeromo.androidClassMp1.ids.IdsView
-import com.jorgeromo.androidClassMp1.secondpartial.home.HomeView
+import com.jorgeromo.androidClassMp1.secondpartial.home.model.network.HomeApi
+import com.jorgeromo.androidClassMp1.secondpartial.home.repository.HomeRepository
+import com.jorgeromo.androidClassMp1.secondpartial.home.viewmodel.HomeViewModel
+import com.jorgeromo.androidClassMp1.secondpartial.home.viewmodel.HomeViewModelFactory
+import com.jorgeromo.androidClassMp1.secondpartial.home.views.HomeView
 import com.jorgeromo.androidClassMp1.secondpartial.qrcode.QrCodeView
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +114,16 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             startDestination = ScreenNavigation.Ids.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(ScreenNavigation.Home.route) { HomeView() }
+            composable(ScreenNavigation.Home.route) {  val retrofit = Retrofit.Builder()
+                .baseUrl("https://gist.githubusercontent.com/YajahiraPP/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                val api = retrofit.create(HomeApi::class.java)
+                val repo = HomeRepository(api)
+                val vm: HomeViewModel = viewModel(factory = HomeViewModelFactory(repo))
+                val uiState by vm.ui.collectAsState()
+                LaunchedEffect(Unit) { vm.fetchHome() }
+                HomeView(uiState = uiState) }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView(navController) }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }

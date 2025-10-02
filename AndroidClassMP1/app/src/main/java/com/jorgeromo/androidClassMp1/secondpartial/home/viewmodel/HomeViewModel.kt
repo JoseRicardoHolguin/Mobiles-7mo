@@ -1,67 +1,44 @@
-package com.jorgeromo.androidClassMp1.secondpartial.home
+package com.jorgeromo.androidClassMp1.secondpartial.home.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jorgeromo.androidClassMp1.secondpartial.home.repository.HomeRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
-class SecondHomeViewModel : ViewModel() {
-    private val _state = MutableStateFlow(SecondHomeModel())
-    val state: StateFlow<SecondHomeModel> = _state
+class HomeViewModel(private val repo: HomeRepository) : ViewModel() {
+    private val _ui = MutableStateFlow(HomeUiState())
+    val ui: StateFlow<HomeUiState> = _ui
 
-    init {
-        // Cargar datos de ejemplo del JSON
-        loadSampleData()
-    }
+    private val _toastEvents = Channel<String>(Channel.BUFFERED)
+    val toastEvents = _toastEvents.receiveAsFlow()
 
-    private fun loadSampleData() {
-        val rutinas = listOf(
-            Rutina(
-                id = 1,
-                nombre = "Rutina Pecho",
-                descripcion = "Ejercicios para pecho",
-                musculo = "Pecho",
-                imagen = "https://res.cloudinary.com/dfrk1camh/image/upload/v1758573449/pecho_vyrxcg.png",
-                duracion = "90 min"
-            ),
-            Rutina(
-                id = 2,
-                nombre = "Rutina Piernas",
-                descripcion = "Ejercicios para piernas",
-                musculo = "Piernas",
-                imagen = "https://res.cloudinary.com/dfrk1camh/image/upload/v1758573395/piernas_gnmg9i.png",
-                duracion = "105 min"
-            ),
-            Rutina(
-                id = 3,
-                nombre = "Rutina Espalda",
-                descripcion = "Ejercicios para espalda",
-                musculo = "Espalda",
-                imagen = "https://res.cloudinary.com/dfrk1camh/image/upload/v1758573466/espalda_gzzuae.png",
-                duracion = "95 min"
-            )
-        )
+    sealed interface HomeNavEvent
 
-        val ejercicios = listOf(
-            Ejercicio(
-                id = 101,
-                nombre = "Press banca",
-                repeticiones = "4x10",
-                categoria = "Pecho"
-            ),
-            Ejercicio(
-                id = 102,
-                nombre = "Sentadilla",
-                repeticiones = "4x12",
-                categoria = "Piernas"
-            ),
-            Ejercicio(
-                id = 103,
-                nombre = "Dominadas",
-                repeticiones = "4x8",
-                categoria = "Espalda"
-            )
-        )
+    private val _navEvents = Channel<HomeNavEvent>(Channel.BUFFERED)
+    val navEvents = _navEvents.receiveAsFlow()
 
-        _state.value = SecondHomeModel(rutinas = rutinas, ejercicios = ejercicios)
+    fun fetchHome() {
+        _ui.value = _ui.value.copy(isLoading = true, error = null)
+        viewModelScope.launch {
+            val result = repo.getRoutines()
+            result.onSuccess { response ->
+                _ui.value = _ui.value.copy(
+                    rutinas = response.rutinas,
+                    ejercicios = response.ejercicios,
+                    isLoading = false,
+                    error = null
+                )
+            }.onFailure { e ->
+                _ui.value = _ui.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "Error desconocido"
+                )
+                _toastEvents.send(e.message ?: "Error al cargar Home")
+            }
+        }
     }
 }

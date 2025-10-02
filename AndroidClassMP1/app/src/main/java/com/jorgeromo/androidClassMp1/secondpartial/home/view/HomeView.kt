@@ -1,151 +1,168 @@
-package com.jorgeromo.androidClassMp1.secondpartial.home
+package com.jorgeromo.androidClassMp1.secondpartial.home.views
 
+import EjercicioDto
+import RutinaDto
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import androidx.compose.foundation.shape.RoundedCornerShape
+import coil.compose.rememberAsyncImagePainter
+import com.jorgeromo.androidClassMp1.secondpartial.home.viewmodel.HomeUiState
 
 @Composable
-fun HomeView() {
-    val viewModel: SecondHomeViewModel = viewModel()
-    val state by viewModel.state.collectAsState()
+fun HomeView(
+    uiState: HomeUiState,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            uiState.isLoading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            uiState.error != null -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = uiState.error ?: "Error", color = MaterialTheme.colorScheme.error)
+                }
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    // Sección de Rutinas (slider horizontal)
+                    item {
+                        Text(
+                            text = "Rutinas de Ejercicio",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                        LazyRow(
+                            modifier = Modifier.height(210.dp),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(uiState.rutinas) { rutina ->
+                                RutinaCard(rutina)
+                            }
+                        }
+                    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Título
-        Text(
-            text = "Rutinas de Ejercicio",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Slider horizontal de rutinas
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(state.rutinas) { rutina ->
-                RutinaCard(rutina = rutina)
+                    // Sección de Ejercicios (lista vertical)
+                    item {
+                        Text(
+                            text = "Ejercicios Disponibles",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                    }
+                    items(uiState.ejercicios) { ejercicio ->
+                        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
+                            EjercicioCard(ejercicio)
+                        }
+                    }
+                }
             }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Título para ejercicios
-        Text(
-            text = "Ejercicios Disponibles",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        // Lista de ejercicios
+@Composable
+fun RutinaCard(rutina: RutinaDto) {
+    Card(
+        modifier = Modifier
+            .width(240.dp)
+            .height(190.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            state.ejercicios.forEach { ejercicio ->
-                EjercicioItem(ejercicio = ejercicio)
-            }
-        }
-    }
-}
-
-@Composable
-fun RutinaCard(rutina: Rutina) {
-    Card(
-        modifier = Modifier
-            .width(280.dp)
-            .height(200.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Column {
-            // Imagen de la rutina
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(rutina.imagen)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = rutina.nombre,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = rutina.nombre,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = rutina.musculo,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = rutina.duracion,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun EjercicioItem(ejercicio: Ejercicio) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
-                Text(
-                    text = ejercicio.nombre,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = ejercicio.categoria,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            Box(
+                modifier = Modifier
+                    .height(110.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(rutina.imagen)
+                    ,
+                    contentDescription = rutina.nombre.ifBlank { "Imagen rutina" },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(110.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
                 )
             }
             Text(
+                text = rutina.nombre,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                modifier = Modifier.padding(top = 8.dp),
+                maxLines = 1
+            )
+            Text(
+                text = rutina.musculo,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+fun EjercicioCard(ejercicio: EjercicioDto) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 88.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = ejercicio.nombre,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                maxLines = 1
+            )
+            Text(
+                text = ejercicio.categoria,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
+            Text(
                 text = ejercicio.repeticiones,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.primary
             )
         }

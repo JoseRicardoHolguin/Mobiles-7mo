@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828137743409",
+    "project_id": "androidclassmp1",
+    "storage_bucket": "androidclassmp1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828137743409:android:e706bef2b9c97080782110",
+        "android_client_info": {
+          "package_name": "com.jorgeromo.androidClassMp1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIl6VCmRvokTr9ZogSmGGt_7tNB4FnYfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
