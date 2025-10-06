@@ -1,18 +1,22 @@
 import com.google.gson.annotations.SerializedName
 
+data class RoutinesResponse(
+    val rutinas: List<RutinaDto> = emptyList(),
+    val ejercicios: List<EjercicioDto> = emptyList()
+)
+
 data class RutinaDto(
-    val id: Int = 0,
-    val nombre: String = "",
-    val descripcion: String = "",
-    val musculo: String = "",
-    val imagen: String = "",
-    val duracion: String = ""
+    val id: Int,
+    val nombre: String? = null,
+    val descripcion: String? = null,
+    val musculo: String? = null,
+    val imagen: String? = null,
+    val duracion: String? = null
 )
 
 data class EjercicioDto(
-    val id: Int = 0,
-    val nombre: String = "",
-    val repeticiones: String = "",
-    @SerializedName("categoria") val categoria: String = ""
+    val id: Int,
+    val nombre: String? = null,
+    val repeticiones: String? = null,
+    val categoria: String? = null
 )
-

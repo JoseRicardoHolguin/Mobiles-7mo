@@ -1,7 +1,5 @@
 package com.jorgeromo.androidClassMp1.secondpartial.home.views
 
-import EjercicioDto
-import RutinaDto
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,10 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import coil.compose.rememberAsyncImagePainter
+import com.jorgeromo.androidClassMp1.secondpartial.home.model.dto.EjercicioDto
+import com.jorgeromo.androidClassMp1.secondpartial.home.model.dto.RutinaDto
 import com.jorgeromo.androidClassMp1.secondpartial.home.viewmodel.HomeUiState
 
 @Composable
-fun HomeView(
+fun HomeViewRoutines(
     uiState: HomeUiState,
     modifier: Modifier = Modifier
 ) {
@@ -55,7 +55,6 @@ fun HomeView(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
                         LazyRow(
-                            modifier = Modifier.height(210.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -108,9 +107,8 @@ fun RutinaCard(rutina: RutinaDto) {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(rutina.imagen)
-                    ,
-                    contentDescription = rutina.nombre.ifBlank { "Imagen rutina" },
+                    painter = rememberAsyncImagePainter(rutina.imagen),
+                    contentDescription = rutina.nombre.orEmpty(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(110.dp)
@@ -119,13 +117,13 @@ fun RutinaCard(rutina: RutinaDto) {
                 )
             }
             Text(
-                text = rutina.nombre,
+                text = rutina.nombre.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 modifier = Modifier.padding(top = 8.dp),
                 maxLines = 1
             )
             Text(
-                text = rutina.musculo,
+                text = rutina.musculo.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -147,24 +145,25 @@ fun EjercicioCard(ejercicio: EjercicioDto) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(
-                text = ejercicio.nombre,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                maxLines = 1
-            )
-            Text(
-                text = ejercicio.categoria,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
-            )
-            Text(
-                text = ejercicio.repeticiones,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            content = {
+                Text(
+                    text = ejercicio.nombre.orEmpty(),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 1
+                )
+                Text(
+                    text = ejercicio.categoria.orEmpty(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+                Text(
+                    text = ejercicio.repeticiones.orEmpty(),
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        )
     }
 }

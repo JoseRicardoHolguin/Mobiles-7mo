@@ -2,63 +2,64 @@ package com.jorgeromo.androidClassMp1.secondpartial.firebase
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
+import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.jorgeromo.androidClassMp1.R
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("FCM", "Nuevo token: $token")
-        // Aquí puedes enviar el token a tu backend si quieres
+        // TODO: Enviar el token a tu servidor si necesitas notificaciones dirigidas
     }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+        // Intentar obtener título y cuerpo desde notification payload o data payload
+        val title = message.notification?.title
+            ?: message.data["title"]
+            ?: getString(R.string.app_name)
+        val body = message.notification?.body
+            ?: message.data["body"]
+            ?: "Tienes una nueva notificación"
 
-        Log.d("FCM", "Mensaje recibido: ${remoteMessage.data}")
-
-        // Mostrar una notificación
-        remoteMessage.notification?.let {
-            mostrarNotificacion(it.title ?: "Sin título", it.body ?: "Sin contenido")
-        }
+        showNotification(title, body)
     }
 
-    private fun mostrarNotificacion(title: String, message: String) {
+    private fun showNotification(title: String, body: String) {
         val channelId = "default_channel"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Canal por defecto",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
-        }
-
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
+        createNotificationChannelIfNeeded(channelId)
 
         val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.mipmap.ic_launcher) // definido en manifest via metadata
             .setContentTitle(title)
-            .setContentText(message)
+            .setContentText(body)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .build()
 
         with(NotificationManagerCompat.from(this)) {
-            notify(1, notification)
+            notify(System.currentTimeMillis().toInt(), notification)
+        }
+    }
+
+    private fun createNotificationChannelIfNeeded(channelId: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "General"
+            val descriptionText = "Notificaciones generales"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 }
