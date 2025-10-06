@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 import com.jorgeromo.androidClassMp1.ids.IdsView
 import com.jorgeromo.androidClassMp1.secondpartial.home.HomeView
+import com.jorgeromo.androidClassMp1.secondpartial.location.LocationCoordianteView
 import com.jorgeromo.androidClassMp1.secondpartial.qrcode.QrCodeView
 
 
@@ -121,6 +122,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             composable(ScreenNavigation.Locations.route) { LocationListScreen() }
             composable(ScreenNavigation.Lottie.route) {LottieAnimationView()}
             composable(ScreenNavigation.QrCode.route) { QrCodeView() }
+            composable(ScreenNavigation.LocationCoordinate.route) { LocationCoordianteView()}
 
         }
     }
